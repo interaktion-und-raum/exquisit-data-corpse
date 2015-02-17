@@ -11,7 +11,6 @@ public class SketchBroadcastingClient extends PApplet {
     public void setup() {
         size(640, 480);
         frameRate(25);
-//        mClient = new NetworkClient(this, "224.0.0.224", "dennis");
         mClient = new NetworkClient(this, "127.0.0.1", "dennis");
     }
 

@@ -6,7 +6,6 @@ import oscP5.OscMessage;
 import oscP5.OscP5;
 import processing.core.PApplet;
 
-
 public class SketchBroadcastingServer extends PApplet {
 
     OscP5 oscP5;
@@ -24,7 +23,6 @@ public class SketchBroadcastingServer extends PApplet {
     public void setup() {
         size(400, 300);
         oscP5 = new OscP5(this, myListeningPort);
-//        oscP5 = new OscP5(this, "224.0.0.0", myListeningPort, MULTICAST);
         frameRate(15);
         textFont(createFont("Courier", mFontSize));
         fill(0);

@@ -1,48 +1,68 @@
 package de.dennisppaul.ciid2015.exquisitdatacorpse;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import netP5.NetAddress;
 import oscP5.OscMessage;
 import oscP5.OscP5;
+import processing.core.PApplet;
 
 import static processing.core.PApplet.println;
 
 public class NetworkClient {
 
-    private final OscP5 oscP5;
+    private final OscP5 mOSC;
 
     private final NetAddress myBroadcastLocation;
 
     private final String mAddrPattern;
 
-    private final Object p;
+    private final Object mClientParent;
 
     private static final String mReceiveMethod = "receive";
 
-    public NetworkClient(Object pPAppletClient, String pServer, String pAddrPattern) {
-        p = pPAppletClient;
-        oscP5 = new OscP5(this, 12000);
+    public NetworkClient(Object pClientParent, String pServer, String pAddrPattern) {
+        mClientParent = pClientParent;
+        mOSC = new OscP5(this, 12000);
         myBroadcastLocation = new NetAddress(pServer, 32000);
         mAddrPattern = pAddrPattern;
         connect();
+
+        prepareExitHandler();
+        if (pClientParent instanceof PApplet) {
+            PApplet p = (PApplet) pClientParent;
+            p.registerMethod("dispose", this);
+        }
+    }
+
+    public void dispose() {
+        System.out.println("### disconnecting client");
+        disconnect();
+    }
+
+    private void prepareExitHandler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                System.out.println("### disconnecting client*");
+                disconnect();
+            }
+        }));
     }
 
     public final void connect() {
         OscMessage m = new OscMessage("/server/connect");
-        oscP5.send(m, myBroadcastLocation);
+        mOSC.send(m, myBroadcastLocation);
     }
 
     public final void disconnect() {
         OscMessage m = new OscMessage("/server/disconnect");
-        oscP5.send(m, myBroadcastLocation);
+        mOSC.send(m, myBroadcastLocation);
     }
 
     public void send(String tag, float x) {
         OscMessage m = new OscMessage(mAddrPattern);
         m.add(tag);
         m.add(x);
-        oscP5.send(m, myBroadcastLocation);
+        mOSC.send(m, myBroadcastLocation);
     }
 
     public void send(String tag, float x, float y) {
@@ -50,7 +70,7 @@ public class NetworkClient {
         m.add(tag);
         m.add(x);
         m.add(y);
-        oscP5.send(m, myBroadcastLocation);
+        mOSC.send(m, myBroadcastLocation);
     }
 
     public void send(String tag, float x, float y, float z) {
@@ -59,33 +79,33 @@ public class NetworkClient {
         m.add(x);
         m.add(y);
         m.add(z);
-        oscP5.send(m, myBroadcastLocation);
+        mOSC.send(m, myBroadcastLocation);
     }
 
     private void receive(String name, String tag, float x) {
         try {
-            Method method = p.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE});
-            method.invoke(p, name, tag, x);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            Method method = mClientParent.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE});
+            method.invoke(mClientParent, name, tag, x);
+        } catch (Exception ex) {
+//            ex.printStackTrace();
         }
     }
 
-    void receive(String name, String tag, float x, float y) {
+    private void receive(String name, String tag, float x, float y) {
         try {
-            Method method = p.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE, Float.TYPE});
-            method.invoke(p, name, tag, x, y);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            Method method = mClientParent.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE, Float.TYPE});
+            method.invoke(mClientParent, name, tag, x, y);
+        } catch (Exception ex) {
+//            ex.printStackTrace();
         }
     }
 
     private void receive(String name, String tag, float x, float y, float z) {
         try {
-            Method method = p.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE, Float.TYPE, Float.TYPE});
-            method.invoke(p, name, tag, x, y, z);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            Method method = mClientParent.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE, Float.TYPE, Float.TYPE});
+            method.invoke(mClientParent, name, tag, x, y, z);
+        } catch (Exception ex) {
+//            ex.printStackTrace();
         }
     }
 
