@@ -4,9 +4,9 @@ import processing.core.PApplet;
 
 public class SketchBroadcastingClient extends PApplet {
 
-    public NetworkClient mClient;
+    private NetworkClient mClient;
 
-    public float mX;
+    private float mBackgroundColor;
 
     public void setup() {
         size(640, 480);
@@ -15,12 +15,12 @@ public class SketchBroadcastingClient extends PApplet {
     }
 
     public void draw() {
-        background(mX);
+        background(mBackgroundColor);
     }
 
     public void mousePressed() {
         mClient.send("mouse", mouseX, mouseY);
-        mClient.send("random", random(width));
+        mClient.send("random", random(255));
     }
 
     public void keyPressed() {
@@ -32,11 +32,19 @@ public class SketchBroadcastingClient extends PApplet {
         }
     }
 
-    public void receive(String name, String tag, float x, float y) {
-        println("### " + name + " - " + tag + " - " + x + ", " + y);
-        if (name.equals("dennis")) {
-            mX = x;
+    public void receive(String name, String tag, float x) {
+        println("### received: " + name + " - " + tag + " - " + x);
+        if (name.equals("dennis") && tag.equals("random")) {
+            mBackgroundColor = x;
         }
+    }
+
+    public void receive(String name, String tag, float x, float y) {
+        println("### received: " + name + " - " + tag + " - " + x + ", " + y);
+    }
+
+    public void receive(String name, String tag, float x, float y, float z) {
+        println("### received: " + name + " - " + tag + " - " + x + ", " + y + ", " + z);
     }
 
     public static void main(String[] args) {

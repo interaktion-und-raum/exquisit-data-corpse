@@ -1,4 +1,4 @@
-package de.dennisppaul.ciid2015.exquisitdatacorpse.logo;
+package de.dennisppaul.ciid2015.exquisitdatacorpse.additional.logo;
 
 import processing.core.PApplet;
 

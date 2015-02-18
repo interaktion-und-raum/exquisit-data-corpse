@@ -9,13 +9,11 @@ import oscP5.OscMessage;
 import oscP5.OscP5;
 import processing.core.PApplet;
 
-import static processing.core.PApplet.println;
-
 public class NetworkClient {
 
     private final OscP5 mOSC;
 
-    private final NetAddress myBroadcastLocation;
+    private final NetAddress mBroadcastLocation;
 
     private final String mAddrPattern;
 
@@ -27,6 +25,11 @@ public class NetworkClient {
 
     private int mPort;
 
+    private static final String DELIMITER = "/";
+
+    public static boolean SHOW_LOG = true;
+    private static final String ANONYM = "anonymous";
+
     public NetworkClient(Object pClientParent, String pServer, String pAddrPattern) {
         mClientParent = pClientParent;
 
@@ -35,10 +38,10 @@ public class NetworkClient {
             mPort++;
         }
 
-        System.out.println("### client using port " + mPort);
+        log("###", "client using port " + mPort);
 
         mOSC = new OscP5(this, mPort);
-        myBroadcastLocation = new NetAddress(pServer, 32000);
+        mBroadcastLocation = new NetAddress(pServer, 32000);
         mAddrPattern = pAddrPattern;
         connect();
 
@@ -77,14 +80,14 @@ public class NetworkClient {
     }
 
     public void dispose() {
-        System.out.println("### disconnecting client");
+        log("###", "disconnecting client*");
         disconnect();
     }
 
     private void prepareExitHandler() {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
-                System.out.println("### disconnecting client*");
+                log("###", "disconnecting client*");
                 disconnect();
             }
         }));
@@ -93,37 +96,40 @@ public class NetworkClient {
     public final void connect() {
         OscMessage m = new OscMessage("/server/connect");
         m.add(mPort);
-        mOSC.send(m, myBroadcastLocation);
+        System.out.println("### also connect with a name `m.add(mAddrPattern`); so that IPs can be mapped to names.");
+        mOSC.send(m, mBroadcastLocation);
     }
 
     public final void disconnect() {
         OscMessage m = new OscMessage("/server/disconnect");
         m.add(mPort);
-        mOSC.send(m, myBroadcastLocation);
+        mOSC.send(m, mBroadcastLocation);
     }
 
     public void send(String tag, float x) {
-        OscMessage m = new OscMessage(mAddrPattern);
-        m.add(tag);
+        OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
-        mOSC.send(m, myBroadcastLocation);
+        mOSC.send(m, mBroadcastLocation);
     }
 
     public void send(String tag, float x, float y) {
-        OscMessage m = new OscMessage(mAddrPattern);
-        m.add(tag);
+        OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
         m.add(y);
-        mOSC.send(m, myBroadcastLocation);
+        mOSC.send(m, mBroadcastLocation);
     }
 
     public void send(String tag, float x, float y, float z) {
-        OscMessage m = new OscMessage(mAddrPattern);
-        m.add(tag);
+        OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
         m.add(y);
         m.add(z);
-        mOSC.send(m, myBroadcastLocation);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
+    private String getAddressPattern(String pTag) {
+        String mAddrPatternP = DELIMITER + mAddrPattern + DELIMITER + pTag;
+        return mAddrPatternP;
     }
 
     private void receive(String name, String tag, float x) {
@@ -154,24 +160,54 @@ public class NetworkClient {
     }
 
     public void oscEvent(OscMessage theOscMessage) {
-        println("### client: received an osc message with addrpattern " + theOscMessage.addrPattern() + " and typetag " + theOscMessage.typetag());
-        if (theOscMessage.typetag().equalsIgnoreCase("sf")) {
-            receive(theOscMessage.addrPattern(),
-                    theOscMessage.get(0).stringValue(),
+        if (theOscMessage.typetag().equalsIgnoreCase("f")) {
+            receive(getName(theOscMessage.addrPattern()),
+                    getTag(theOscMessage.addrPattern()),
+                    theOscMessage.get(0).floatValue());
+        } else if (theOscMessage.typetag().equalsIgnoreCase("ff")) {
+            receive(getName(theOscMessage.addrPattern()),
+                    getTag(theOscMessage.addrPattern()),
+                    theOscMessage.get(0).floatValue(),
                     theOscMessage.get(1).floatValue());
-        } else if (theOscMessage.typetag().equalsIgnoreCase("sff")) {
-            receive(theOscMessage.addrPattern(),
-                    theOscMessage.get(0).stringValue(),
+        } else if (theOscMessage.typetag().equalsIgnoreCase("fff")) {
+            receive(getName(theOscMessage.addrPattern()),
+                    getTag(theOscMessage.addrPattern()),
+                    theOscMessage.get(0).floatValue(),
                     theOscMessage.get(1).floatValue(),
                     theOscMessage.get(2).floatValue());
-        } else if (theOscMessage.typetag().equalsIgnoreCase("sfff")) {
-            receive(theOscMessage.addrPattern(),
-                    theOscMessage.get(0).stringValue(),
-                    theOscMessage.get(1).floatValue(),
-                    theOscMessage.get(2).floatValue(),
-                    theOscMessage.get(3).floatValue());
         } else {
-            theOscMessage.print();
+            log("### ", "client couldn t parse message:");
+            log("### ", theOscMessage.toString());
+        }
+    }
+
+    private String getTag(String pAddrPattern) {
+        String[] mStrings = PApplet.split(pAddrPattern, DELIMITER);
+        if (mStrings.length == 3) {
+            return mStrings[2];
+        } else if (mStrings.length == 2) {
+            return mStrings[1];
+        } else {
+            log("### ", "ERROR-MALFORMED-NAME-TAG: " + pAddrPattern);
+            return "ERROR-MALFORMED-NAME-TAG";
+        }
+    }
+
+    private String getName(String pAddrPattern) {
+        String[] mStrings = PApplet.split(pAddrPattern, DELIMITER);
+        if (mStrings.length == 3) {
+            return mStrings[1];
+        } else if (mStrings.length == 2) {
+            return ANONYM;
+        } else {
+            log("### ", "ERROR-MALFORMED-NAME-TAG: " + pAddrPattern);
+            return "ERROR-MALFORMED-NAME-TAG";
+        }
+    }
+
+    private void log(String p, String m) {
+        if (SHOW_LOG) {
+            System.err.println(p + "\t" + m);
         }
     }
 }
