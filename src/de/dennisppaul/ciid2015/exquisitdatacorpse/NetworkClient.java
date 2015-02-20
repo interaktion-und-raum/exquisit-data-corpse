@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import netP5.NetAddress;
 import oscP5.OscMessage;
 import oscP5.OscP5;

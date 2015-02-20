@@ -1,8 +1,11 @@
 #!/bin/sh
 
 LIBRARY=exquisit_data_corpse
+VERSION=$(printf %03d%s ${2%.*})
 
-find .. -name ".DS_Store" -print0 | xargs -0 rm -f
-cd ../processing-library/
-zip --quiet -r ../dist/$LIBRARY.zip ./$LIBRARY
-cd ../dist/
+echo "* packing "$LIBRARY-$VERSION.zip
+
+find $1/.. -name ".DS_Store" -print0 | xargs -0 rm -f
+cd $1/../processing-library/
+zip --quiet -r $1/../dist/$LIBRARY-$VERSION.zip ./$LIBRARY
+cd $1/../dist/

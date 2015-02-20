@@ -7,8 +7,8 @@ PVector mPreviousPostion;
 java.awt.Robot mRobot;
 NetworkClient mClient;
 void setup() {
-    size(400, 300);
-    frameRate(30);
+    size(100, 75);
+    frameRate(25);
     background(255);
     try {
         mRobot = new java.awt.Robot();
@@ -18,7 +18,7 @@ void setup() {
     mScreenSize = new PVector(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width,
                               java.awt.Toolkit.getDefaultToolkit().getScreenSize().height);
     mPreviousPostion = new PVector();
-    mClient = new NetworkClient(this, "127.0.0.1", "auto-mouse");
+    mClient = new NetworkClient(this, "127.0.0.1", "mouse");
 }
 void keyPressed() {
     if (key == ',') {
@@ -42,7 +42,6 @@ void draw() {
          mPreviousPostion.x * width,
          mPreviousPostion.y * height);
     /* send values */
-    mClient.send("position", p.x, p.y);
-    mClient.send("color", color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
+    mClient.send("xyc", p.x, p.y, color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
     mPreviousPostion.set(p.x, p.y);
 }

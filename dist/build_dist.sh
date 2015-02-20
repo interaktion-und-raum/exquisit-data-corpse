@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ROOT=$(pwd)
+VERSION=$1
 
 printJob()
 {
@@ -18,5 +19,5 @@ printJob "creating processing sketches"
 sh $ROOT/create-processing-sketches.sh $ROOT
 
 printJob "packing zip"
-sh $ROOT/pack-zip.sh $ROOT
+sh $ROOT/pack-zip.sh $ROOT $VERSION
 printJob "done"
