@@ -10,7 +10,7 @@ import oscP5.OscMessage;
 import oscP5.OscP5;
 import processing.core.PApplet;
 
-public class SketchBroadcastingServer extends PApplet {
+public class AppBroadcastingServer extends PApplet {
 
     private OscP5 oscP5;
 
@@ -42,6 +42,8 @@ public class SketchBroadcastingServer extends PApplet {
         textFont(createFont("Courier", mFontSize));
         fill(0);
         noStroke();
+
+        // todo write logfile of number if messages to HD / once a second
     }
 
     public synchronized void draw() {
@@ -105,8 +107,9 @@ public class SketchBroadcastingServer extends PApplet {
             oscP5.send(pOscMessage, myNetAddressList);
 
             /* try to connect name and IP:port */
-            System.out.println("### try to connect name and IP:port.");
 
+//            System.out.println("### trying to connect name and IP:port.");
+            
 //            /* check if the message has a name+tag. if yes check the the 'name' matches with an IP in the address map */
 //            final String mAddress = pOscMessage.netAddress().address() + ":" + pOscMessage.netAddress().port();
 //            String mValue = mAddressMap.get(mAddress);
@@ -161,6 +164,6 @@ public class SketchBroadcastingServer extends PApplet {
     }
 
     public static void main(String[] args) {
-        PApplet.main(SketchBroadcastingServer.class.getName());
+        PApplet.main(AppBroadcastingServer.class.getName());
     }
 }
