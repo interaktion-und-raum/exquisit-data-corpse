@@ -8,3 +8,8 @@ teaching material for the *introduction to programming* course at CIID 2015
 * [mouseandkeylogger](https://github.com/d3p/mouseandkeylogger)
 * [jnativehook](https://github.com/kwhat/jnativehook)
 
+## versions
+
+### 001 20150220
+
+* initial release
