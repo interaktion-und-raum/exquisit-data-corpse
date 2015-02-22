@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class SketchBroadcastingServer extends PApplet {
 
     public void setup() {
-        size(1,1);
+        size(1, 1);
         main(AppBroadcastingServer.class.getName());
     }
 

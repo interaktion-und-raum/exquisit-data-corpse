@@ -42,7 +42,7 @@ public class SketchDataStreamMouseLoggerNoLib extends PApplet {
         }
     }
 
-    public void mouseMoved() {
+    public void sendMouseMoved() {
         /* position */
         mPosition.set(java.awt.MouseInfo.getPointerInfo().getLocation().x / mScreenSize.x,
                       java.awt.MouseInfo.getPointerInfo().getLocation().y / mScreenSize.y);
@@ -50,8 +50,13 @@ public class SketchDataStreamMouseLoggerNoLib extends PApplet {
         /* color */
         mColor = mRobot.getPixelColor(java.awt.MouseInfo.getPointerInfo().getLocation().x,
                                       java.awt.MouseInfo.getPointerInfo().getLocation().y);
-        /* send values */
-        mClient.send("xyc", mPosition.x, mPosition.y, color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
+        /* send values ( only if they have changed ) */
+        if (mPosition.x != mPreviousPostion.x && mPosition.y != mPreviousPostion.y) {
+            mClient.send("xyc",
+                         mPosition.x,
+                         mPosition.y,
+                         color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
+        }
 
         mPreviousPostion.set(mPosition.x, mPosition.y);
     }
@@ -65,6 +70,7 @@ public class SketchDataStreamMouseLoggerNoLib extends PApplet {
              mPreviousPostion.x * width,
              mPreviousPostion.y * height);
 
+        sendMouseMoved();
     }
 
     public static void main(String[] args) {
