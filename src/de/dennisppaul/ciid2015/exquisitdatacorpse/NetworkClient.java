@@ -115,7 +115,7 @@ public class NetworkClient {
     public final void connect() {
         OscMessage m = new OscMessage("/server/connect");
         m.add(mPort);
-        System.out.println("### also connect with a name `m.add(mAddrPattern`); so that IPs can be mapped to names.");
+//        System.out.println("### also connect with a name `m.add(mAddrPattern`); so that IPs can be mapped to names.");
         mOSC.send(m, mBroadcastLocation);
     }
 
@@ -201,21 +201,27 @@ public class NetworkClient {
     }
 
     public void oscEvent(OscMessage theOscMessage) {
-        if (theOscMessage.typetag().equalsIgnoreCase("f") && mMethodReceive1f != null) {
-            receive(getName(theOscMessage.addrPattern()),
-                    getTag(theOscMessage.addrPattern()),
-                    theOscMessage.get(0).floatValue());
-        } else if (theOscMessage.typetag().equalsIgnoreCase("ff") && mMethodReceive2f != null) {
-            receive(getName(theOscMessage.addrPattern()),
-                    getTag(theOscMessage.addrPattern()),
-                    theOscMessage.get(0).floatValue(),
-                    theOscMessage.get(1).floatValue());
-        } else if (theOscMessage.typetag().equalsIgnoreCase("fff") && mMethodReceive3f != null) {
-            receive(getName(theOscMessage.addrPattern()),
-                    getTag(theOscMessage.addrPattern()),
-                    theOscMessage.get(0).floatValue(),
-                    theOscMessage.get(1).floatValue(),
-                    theOscMessage.get(2).floatValue());
+        if (theOscMessage.typetag().equalsIgnoreCase("f")) {
+            if (mMethodReceive1f != null) {
+                receive(getName(theOscMessage.addrPattern()),
+                        getTag(theOscMessage.addrPattern()),
+                        theOscMessage.get(0).floatValue());
+            }
+        } else if (theOscMessage.typetag().equalsIgnoreCase("ff")) {
+            if (mMethodReceive2f != null) {
+                receive(getName(theOscMessage.addrPattern()),
+                        getTag(theOscMessage.addrPattern()),
+                        theOscMessage.get(0).floatValue(),
+                        theOscMessage.get(1).floatValue());
+            }
+        } else if (theOscMessage.typetag().equalsIgnoreCase("fff")) {
+            if (mMethodReceive3f != null) {
+                receive(getName(theOscMessage.addrPattern()),
+                        getTag(theOscMessage.addrPattern()),
+                        theOscMessage.get(0).floatValue(),
+                        theOscMessage.get(1).floatValue(),
+                        theOscMessage.get(2).floatValue());
+            }
         } else {
             log("### ", "client couldn t parse message:");
             log("### ", theOscMessage.toString());

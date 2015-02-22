@@ -11,7 +11,7 @@ public class SketchDataStreamAtomicWorldClock extends PApplet {
         size(15, 15);
         frameRate(1);
 
-        mClient = new NetworkClient(this, "127.0.0.1", "time");
+        mClient = new NetworkClient(this, "edc.local", "time");
     }
 
     public void draw() {

@@ -4,9 +4,11 @@ import de.dennisppaul.ciid2015.exquisitdatacorpse.NetworkClient;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class SketchDataStreamMouse extends PApplet {
+public class SketchDataStreamMouseLoggerNoLib extends PApplet {
 
     private PVector mScreenSize;
+    private PVector mPosition;
+    private java.awt.Color mColor;
     private PVector mPreviousPostion;
     private java.awt.Robot mRobot;
 
@@ -25,8 +27,10 @@ public class SketchDataStreamMouse extends PApplet {
         mScreenSize = new PVector(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width,
                                   java.awt.Toolkit.getDefaultToolkit().getScreenSize().height);
         mPreviousPostion = new PVector();
+        mPosition = new PVector();
+        mColor = new java.awt.Color(0, 0, 0);
 
-        mClient = new NetworkClient(this, "127.0.0.1", "mouse");
+        mClient = new NetworkClient(this, "edc.local", "mouselogger");
     }
 
     public void keyPressed() {
@@ -38,29 +42,32 @@ public class SketchDataStreamMouse extends PApplet {
         }
     }
 
-    public void draw() {
+    public void mouseMoved() {
         /* position */
-        PVector p = new PVector(java.awt.MouseInfo.getPointerInfo().getLocation().x / mScreenSize.x,
-                                java.awt.MouseInfo.getPointerInfo().getLocation().y / mScreenSize.y);
+        mPosition.set(java.awt.MouseInfo.getPointerInfo().getLocation().x / mScreenSize.x,
+                      java.awt.MouseInfo.getPointerInfo().getLocation().y / mScreenSize.y);
 
         /* color */
-        java.awt.Color mColor = mRobot.getPixelColor(java.awt.MouseInfo.getPointerInfo().getLocation().x,
-                                                     java.awt.MouseInfo.getPointerInfo().getLocation().y);
+        mColor = mRobot.getPixelColor(java.awt.MouseInfo.getPointerInfo().getLocation().x,
+                                      java.awt.MouseInfo.getPointerInfo().getLocation().y);
+        /* send values */
+        mClient.send("xyc", mPosition.x, mPosition.y, color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
+
+        mPreviousPostion.set(mPosition.x, mPosition.y);
+    }
+
+    public void draw() {
         stroke(mColor.getRed(), mColor.getGreen(), mColor.getBlue());
 
         /* visualize */
-        line(p.x * width,
-             p.y * height,
+        line(mPosition.x * width,
+             mPosition.y * height,
              mPreviousPostion.x * width,
              mPreviousPostion.y * height);
 
-        /* send values */
-        mClient.send("xyc", p.x, p.y, color(mColor.getRed(), mColor.getGreen(), mColor.getBlue()));
-
-        mPreviousPostion.set(p.x, p.y);
     }
 
     public static void main(String[] args) {
-        PApplet.main(SketchDataStreamMouse.class.getName());
+        PApplet.main(SketchDataStreamMouseLoggerNoLib.class.getName());
     }
 }

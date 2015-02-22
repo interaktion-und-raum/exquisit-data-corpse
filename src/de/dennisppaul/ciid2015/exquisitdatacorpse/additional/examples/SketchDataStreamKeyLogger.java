@@ -1,11 +1,13 @@
 package de.dennisppaul.ciid2015.exquisitdatacorpse.additional.examples;
 
+import de.dennisppaul.ciid2015.exquisitdatacorpse.NetworkClient;
 import mouseandkeylogger.Logger;
 import processing.core.PApplet;
 
 public class SketchDataStreamKeyLogger extends PApplet {
 
     private final StringBuffer mString = new StringBuffer();
+    private NetworkClient mClient;
 
     public void setup() {
         size(400, 300);
@@ -15,6 +17,8 @@ public class SketchDataStreamKeyLogger extends PApplet {
 
         new Logger(this);
         textFont(createFont("Courier", 10));
+
+        mClient = new NetworkClient(this, "edc.local", "keylogger");
     }
 
     public void draw() {
@@ -32,6 +36,7 @@ public class SketchDataStreamKeyLogger extends PApplet {
         } else {
             /* add key to string */
             mString.append(key);
+            mClient.send("key", key);
         }
     }
 

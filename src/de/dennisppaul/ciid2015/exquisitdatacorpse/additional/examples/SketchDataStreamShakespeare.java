@@ -18,7 +18,7 @@ public class SketchDataStreamShakespeare extends PApplet {
         textFont(createFont("Courier", 10));
         textAlign(CENTER, CENTER);
 
-        mClient = new NetworkClient(this, "127.0.0.1", "midsummer");
+        mClient = new NetworkClient(this, "edc.local", "midsummer");
     }
 
     public void draw() {

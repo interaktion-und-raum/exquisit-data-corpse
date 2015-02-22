@@ -12,7 +12,7 @@ public class SketchBroadcastingClient extends PApplet {
     public void setup() {
         size(640, 480);
         frameRate(25);
-        mClient = new NetworkClient(this, "127.0.0.1", "dennis");
+        mClient = new NetworkClient(this, "edc.local", "dennis");
     }
 
     public void draw() {
