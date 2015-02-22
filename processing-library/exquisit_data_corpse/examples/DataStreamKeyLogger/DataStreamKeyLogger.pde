@@ -1,14 +1,16 @@
-import de.dennisppaul.ciid2015.exquisitdatacorpse.*;
+import ciid2015.exquisitdatacorpse.*;
 import oscP5.*;
 import netP5.*;
 
 final StringBuffer mString = new StringBuffer();
+NetworkClient mClient;
 void setup() {
     size(400, 300);
     noStroke();
     fill(0);
     new Logger(this);
     textFont(createFont("Courier", 10));
+    mClient = new NetworkClient(this, "edc.local", "keylogger");
 }
 void draw() {
     background(255);
@@ -24,5 +26,6 @@ void keyTypedLogger(char key) {
     } else {
         /* add key to string */
         mString.append(key);
+        mClient.send("key", key);
     }
 }

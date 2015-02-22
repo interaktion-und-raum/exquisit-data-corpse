@@ -1,4 +1,4 @@
-import de.dennisppaul.ciid2015.exquisitdatacorpse.*;
+import ciid2015.exquisitdatacorpse.*;
 import oscP5.*;
 import netP5.*;
 
@@ -8,19 +8,18 @@ NetworkClient mClient;
 void setup() {
     size(15, 15);
     frameRate(5);
-    System.out.println("### text is " + mEntireText.length + " lines long.");
     textFont(createFont("Courier", 10));
     textAlign(CENTER, CENTER);
-    mClient = new NetworkClient(this, "127.0.0.1", "midsummer");
+    mClient = new NetworkClient(this, "edc.local", "midsummer");
 }
 void draw() {
     mCharNum++;
     if (mCharNum >= mEntireText[mLineNum].length()) {
         mCharNum = 0;
         mLineNum++;
+        /* if the end of the text is reached, start all over again */
         if (mLineNum >= mEntireText.length) {
             mLineNum = 0;
-            System.out.println("### starting all over again.");
         }
     }
     char mChar = mEntireText[mLineNum].charAt(mCharNum);

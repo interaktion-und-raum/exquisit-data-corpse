@@ -1,12 +1,11 @@
-package de.dennisppaul.ciid2015.exquisitdatacorpse.additional.examples;
+package ciid2015.exquisitdatacorpse.additional.examples;
 
-import de.dennisppaul.ciid2015.exquisitdatacorpse.NetworkClient;
+import ciid2015.exquisitdatacorpse.NetworkClient;
 import processing.core.PApplet;
 
 public class SketchDataStreamShakespeare extends PApplet {
 
     private int mLineNum = 0;
-
     private int mCharNum = 0;
     private NetworkClient mClient;
 
@@ -14,11 +13,10 @@ public class SketchDataStreamShakespeare extends PApplet {
         size(15, 15);
         frameRate(5);
 
-        System.out.println("### text is " + mEntireText.length + " lines long.");
         textFont(createFont("Courier", 10));
         textAlign(CENTER, CENTER);
 
-        mClient = new NetworkClient(this, "127.0.0.1", "midsummer");
+        mClient = new NetworkClient(this, "edc.local", "midsummer");
     }
 
     public void draw() {
@@ -26,13 +24,14 @@ public class SketchDataStreamShakespeare extends PApplet {
         if (mCharNum >= mEntireText[mLineNum].length()) {
             mCharNum = 0;
             mLineNum++;
+
+            /* if the end of the text is reached, start all over again */
             if (mLineNum >= mEntireText.length) {
                 mLineNum = 0;
-                System.out.println("### starting all over again.");
             }
         }
-        char mChar = mEntireText[mLineNum].charAt(mCharNum);
 
+        char mChar = mEntireText[mLineNum].charAt(mCharNum);
         mClient.send("single-character", mChar);
 
         background(255);

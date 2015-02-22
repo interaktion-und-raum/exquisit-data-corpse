@@ -1,4 +1,4 @@
-package de.dennisppaul.ciid2015.exquisitdatacorpse;
+package ciid2015.exquisitdatacorpse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import processing.core.PApplet;
 
 public class AppBroadcastingServer extends PApplet {
 
-    private OscP5 oscP5;
+    private OscP5 mOSC;
 
     private final NetAddressList myNetAddressList = new NetAddressList();
 
@@ -32,31 +32,44 @@ public class AppBroadcastingServer extends PApplet {
 
     private final HashMap<String, String> mAddressMap = new HashMap<String, String>();
 
+    private String mIP = "";
+
     public void setup() {
-        size(400, 300);
+        size(480, 640);
 
-        mMaxMessages = 20;
+        mMaxMessages = 58;
 
-        oscP5 = new OscP5(this, myListeningPort);
+        mOSC = new OscP5(this, myListeningPort);
         frameRate(15);
         textFont(createFont("Courier", mFontSize));
         fill(0);
         noStroke();
 
+        log("###", "Server IP: " + mOSC.ip());
+        mIP = mOSC.ip();
         // todo write logfile of number if messages to HD / once a second
     }
 
     public synchronized void draw() {
         background(255);
+        fill(0);
 
         final float mX = 10;
         float mY = mFontSize * 3;
+
+        text("... SERVER IP ADDRESS ... ", mX, mY);
+        mY += mFontSize * 2;
+        fill(0, 127, 255);
+        text("    " + mIP, mX, mY);
+        fill(0);
+        mY += mFontSize * 2;
+
         text("... CONNECTED CLIENTS ... ", mX, mY);
 
         mY += mFontSize * 2;
         for (int i = 0; i < myNetAddressList.size(); i++) {
             NetAddress mNetAddress = myNetAddressList.get(i);
-            text(mNetAddress.address() + ":" + mNetAddress.port(), mX, mY);
+            text("    " + mNetAddress.address() + ":" + mNetAddress.port(), mX, mY);
             mY += mFontSize;
         }
 
@@ -64,7 +77,7 @@ public class AppBroadcastingServer extends PApplet {
         text("... LAST MESSAGES ....... ", mX, mY);
         mY += mFontSize * 2;
         for (OscMessage m : mLastMessages) {
-            text("| " + m.toString() + " | " + getAsString(m.arguments()), mX, mY);
+            text("    " + "| " + m.toString() + " | " + getAsString(m.arguments()), mX, mY);
             mY += mFontSize;
         }
     }
@@ -104,12 +117,10 @@ public class AppBroadcastingServer extends PApplet {
              * if pattern matching was not successful, then broadcast the incoming
              * message to all addresses in the netAddresList.
              */
-            oscP5.send(pOscMessage, myNetAddressList);
+            mOSC.send(pOscMessage, myNetAddressList);
 
             /* try to connect name and IP:port */
-
 //            System.out.println("### trying to connect name and IP:port.");
-            
 //            /* check if the message has a name+tag. if yes check the the 'name' matches with an IP in the address map */
 //            final String mAddress = pOscMessage.netAddress().address() + ":" + pOscMessage.netAddress().port();
 //            String mValue = mAddressMap.get(mAddress);
@@ -123,7 +134,7 @@ public class AppBroadcastingServer extends PApplet {
 
         /* store messages */
         mLastMessages.add(pOscMessage);
-        while (mLastMessages.size() > mMaxMessages) {
+        while (mLastMessages.size() > mMaxMessages - myNetAddressList.size()) {
             mLastMessages.remove(0);
         }
     }
