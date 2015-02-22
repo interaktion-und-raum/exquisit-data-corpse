@@ -1,6 +1,6 @@
-package de.dennisppaul.ciid2015.exquisitdatacorpse.additional.examples;
+package ciid2015.exquisitdatacorpse.additional.examples;
 
-import de.dennisppaul.ciid2015.exquisitdatacorpse.AppBroadcastingServer;
+import ciid2015.exquisitdatacorpse.AppBroadcastingServer;
 import processing.core.PApplet;
 
 public class SketchBroadcastingServer extends PApplet {

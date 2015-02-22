@@ -1,4 +1,4 @@
-package de.dennisppaul.ciid2015.exquisitdatacorpse;
+package ciid2015.exquisitdatacorpse;
 
 import java.util.ArrayList;
 import java.util.Collections;

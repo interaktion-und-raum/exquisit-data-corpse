@@ -4,7 +4,7 @@
 # for further hints on `sed` read this: http://www.grymoire.com/Unix/Sed.html
 #
 
-SRC_PATH="../src/de/dennisppaul/ciid2015/exquisitdatacorpse/additional/examples"
+SRC_PATH="../src/ciid2015/exquisitdatacorpse/additional/examples"
 OUTPUT_DIR="../processing-library/exquisit_data_corpse/examples"
 
 if [ -d "$OUTPUT_DIR" ]; then
@@ -52,7 +52,7 @@ do
 		cat /tmp/tmp.pde | \
 		sed '
 			1 i\
-			 import de.dennisppaul.ciid2015.exquisitdatacorpse.*;\
+			 import ciid2015.exquisitdatacorpse.*;\
 			 import oscP5.*;\
 			 import netP5.*;\
 			 \
