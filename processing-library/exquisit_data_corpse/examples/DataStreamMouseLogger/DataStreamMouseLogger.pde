@@ -2,7 +2,7 @@ import ciid2015.exquisitdatacorpse.*;
 import oscP5.*;
 import netP5.*;
 
-Logger mLogger;
+mouseandkeylogger.Logger mLogger;
 float mMouseX;
 float mMouseY;
 int mMouseColor;
@@ -12,7 +12,7 @@ void setup() {
     size(400, 300);
     noFill();
     background(255);
-    mLogger = new Logger(this);
+    mLogger = new mouseandkeylogger.Logger(this);
     mClient = new NetworkClient(this, "edc.local", "mouselogger");
 }
 void draw() {

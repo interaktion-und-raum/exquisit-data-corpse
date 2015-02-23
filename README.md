@@ -10,6 +10,10 @@ teaching material for the *introduction to programming* course at CIID 2015
 
 ## versions
 
+### 003 20150223
+
+* fixed a problem with the imports in the logger sketches
+
 ### 002 20150222
 
 * made package structure more lean

@@ -8,7 +8,7 @@ void setup() {
     size(400, 300);
     noStroke();
     fill(0);
-    new Logger(this);
+    new mouseandkeylogger.Logger(this);
     textFont(createFont("Courier", 10));
     mClient = new NetworkClient(this, "edc.local", "keylogger");
 }
