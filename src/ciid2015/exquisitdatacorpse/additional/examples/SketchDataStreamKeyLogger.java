@@ -1,7 +1,6 @@
 package ciid2015.exquisitdatacorpse.additional.examples;
 
 import ciid2015.exquisitdatacorpse.NetworkClient;
-import mouseandkeylogger.Logger;
 import processing.core.PApplet;
 
 public class SketchDataStreamKeyLogger extends PApplet {
@@ -15,7 +14,7 @@ public class SketchDataStreamKeyLogger extends PApplet {
         noStroke();
         fill(0);
 
-        new Logger(this);
+        new mouseandkeylogger.Logger(this);
         textFont(createFont("Courier", 10));
 
         mClient = new NetworkClient(this, "edc.local", "keylogger");

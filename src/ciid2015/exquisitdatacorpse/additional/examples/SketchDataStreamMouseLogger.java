@@ -1,14 +1,13 @@
 package ciid2015.exquisitdatacorpse.additional.examples;
 
 import ciid2015.exquisitdatacorpse.NetworkClient;
-import mouseandkeylogger.Logger;
 import processing.core.PApplet;
 
 import static processing.core.PApplet.map;
 
 public class SketchDataStreamMouseLogger extends PApplet {
 
-    private Logger mLogger;
+    private mouseandkeylogger.Logger mLogger;
 
     private float mMouseX;
     private float mMouseY;
@@ -22,7 +21,7 @@ public class SketchDataStreamMouseLogger extends PApplet {
         noFill();
         background(255);
 
-        mLogger = new Logger(this);
+        mLogger = new mouseandkeylogger.Logger(this);
 
         mClient = new NetworkClient(this, "edc.local", "mouselogger");
     }
