@@ -31,9 +31,12 @@ public class NetworkClient {
 
     private static final String ANONYM = "anonymous";
 
+    private static final String LOCALHOST = "127.0.0.1";
+
     private Method mMethodReceive3f;
     private Method mMethodReceive2f;
     private Method mMethodReceive1f;
+    private Method mMethodReceiveStr;
 
     public NetworkClient(Object pClientParent, String pServer, String pAddrPattern) {
         mClientParent = pClientParent;
@@ -59,6 +62,10 @@ public class NetworkClient {
         }
         try {
             mMethodReceive3f = mClientParent.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, Float.TYPE, Float.TYPE, Float.TYPE});
+        } catch (NoSuchMethodException ex) {
+        }
+        try {
+            mMethodReceiveStr = mClientParent.getClass().getDeclaredMethod(mReceiveMethod, new Class[]{String.class, String.class, String.class});
         } catch (NoSuchMethodException ex) {
         }
 
@@ -125,6 +132,33 @@ public class NetworkClient {
         mOSC.send(m, mBroadcastLocation);
     }
 
+    public void send(String tag, float x) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(x);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
+    public void send(String tag, String message) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(message);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
+    public void send(String tag, float x, float y) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(x);
+        m.add(y);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
+    public void send(String tag, float x, float y, float z) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(x);
+        m.add(y);
+        m.add(z);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
     public void spoof(String sender, String tag, float x) {
         OscMessage m = new OscMessage(getAddressPattern(sender, tag));
         m.add(x);
@@ -146,25 +180,40 @@ public class NetworkClient {
         mOSC.send(m, mBroadcastLocation);
     }
 
-    public void send(String tag, float x) {
-        OscMessage m = new OscMessage(getAddressPattern(tag));
-        m.add(x);
-        mOSC.send(m, mBroadcastLocation);
+    public void sneak(String tag, float x) {
+        plant(LOCALHOST, tag, x);
     }
 
-    public void send(String tag, float x, float y) {
+    public void sneak(String tag, float x, float y) {
+        plant(LOCALHOST, tag, x, y);
+    }
+
+    public void sneak(String tag, float x, float y, float z) {
+        plant(LOCALHOST, tag, x, y, z);
+    }
+
+    public void plant(String IP, String tag, float x) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(x);
+        NetAddress mLocal = new NetAddress(IP, mPort);
+        OscP5.flush(m, mLocal);
+    }
+
+    public void plant(String IP, String tag, float x, float y) {
         OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
         m.add(y);
-        mOSC.send(m, mBroadcastLocation);
+        NetAddress mLocal = new NetAddress(IP, mPort);
+        OscP5.flush(m, mLocal);
     }
 
-    public void send(String tag, float x, float y, float z) {
+    public void plant(String IP, String tag, float x, float y, float z) {
         OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
         m.add(y);
         m.add(z);
-        mOSC.send(m, mBroadcastLocation);
+        NetAddress mLocal = new NetAddress(IP, mPort);
+        OscP5.flush(m, mLocal);
     }
 
     private String getAddressPattern(String pAddrPattern, String pTag) {
@@ -200,6 +249,14 @@ public class NetworkClient {
         }
     }
 
+    private void receive(String name, String tag, String message) {
+        try {
+            mMethodReceiveStr.invoke(mClientParent, name, tag, message);
+        } catch (Exception ex) {
+//            ex.printStackTrace();
+        }
+    }
+
     public void oscEvent(OscMessage theOscMessage) {
         if (theOscMessage.typetag().equalsIgnoreCase("f")) {
             if (mMethodReceive1f != null) {
@@ -221,6 +278,12 @@ public class NetworkClient {
                         theOscMessage.get(0).floatValue(),
                         theOscMessage.get(1).floatValue(),
                         theOscMessage.get(2).floatValue());
+            }
+        } else if (theOscMessage.typetag().equalsIgnoreCase("s")) {
+            if (mMethodReceive3f != null) {
+                receive(getName(theOscMessage.addrPattern()),
+                        getTag(theOscMessage.addrPattern()),
+                        theOscMessage.get(0).stringValue());
             }
         } else {
             log("### ", "client couldn t parse message:");
