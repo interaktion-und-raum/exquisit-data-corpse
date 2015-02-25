@@ -34,6 +34,7 @@ public class SketchBroadcastingClient extends PApplet {
          * three (x, y, z) paramters
          */
         mClient.send("random", random(255));
+        mClient.send("message", "hello world!");
     }
 
     public void keyPressed() {

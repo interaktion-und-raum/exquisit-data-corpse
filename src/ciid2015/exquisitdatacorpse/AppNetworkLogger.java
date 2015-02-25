@@ -10,7 +10,7 @@ import netP5.NetAddress;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
-public class NetworkLogger {
+public class AppNetworkLogger {
 
     private static final int MIN_PORT_NUMBER = 12000;
 
@@ -22,7 +22,7 @@ public class NetworkLogger {
 
     private final NetAddress mBroadcastLocation;
 
-    private NetworkLogger(String pServer, String pLogFile) {
+    private AppNetworkLogger(String pServer, String pLogFile) {
         mPort = MIN_PORT_NUMBER;
         mLogFile = pLogFile;
         while (!available(mPort)) {
@@ -36,10 +36,17 @@ public class NetworkLogger {
     }
 
     public void oscEvent(OscMessage theOscMessage) {
-        System.out.print(System.currentTimeMillis() + " | ");
-        System.out.println(theOscMessage.toString());
+        String mMessage = System.currentTimeMillis() + " | " + theOscMessage.toString() + " | " + getAsString(theOscMessage.arguments());
+        System.out.println(mMessage);
+        append(mLogFile, mMessage);
+    }
 
-        append(mLogFile, System.currentTimeMillis() + " | " + theOscMessage.toString());
+    public static String getAsString(Object[] theObject) {
+        StringBuilder s = new StringBuilder();
+        for (Object theObject1 : theObject) {
+            s.append(theObject1).append("\t");
+        }
+        return s.toString();
     }
 
     public final void connect() {
@@ -101,11 +108,10 @@ public class NetworkLogger {
     }
 
     public static void main(String[] args) {
-        System.out.println(System.getProperty("user.dir"));
         if (args.length > 0) {
-            new NetworkLogger(args[0], args[1]);
+            new AppNetworkLogger(args[0], args[1]);
         } else {
-            new NetworkLogger("edc.local", System.getProperty("user.dir") + "/" + "logfile.txt");
+            new AppNetworkLogger("edc.local", System.getProperty("user.dir") + "/" + "logfile.txt");
         }
     }
 }

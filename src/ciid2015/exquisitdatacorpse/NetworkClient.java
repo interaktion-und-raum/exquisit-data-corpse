@@ -280,7 +280,7 @@ public class NetworkClient {
                         theOscMessage.get(2).floatValue());
             }
         } else if (theOscMessage.typetag().equalsIgnoreCase("s")) {
-            if (mMethodReceive3f != null) {
+            if (mMethodReceiveStr != null) {
                 receive(getName(theOscMessage.addrPattern()),
                         getTag(theOscMessage.addrPattern()),
                         theOscMessage.get(0).stringValue());

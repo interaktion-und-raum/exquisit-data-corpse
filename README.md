@@ -10,6 +10,15 @@ teaching material for the *introduction to programming* course at CIID 2015
 
 ## versions
 
+### 005 20150225
+
+* added a simple chat
+* added a receive/send method for a string message
+
+### 004 20150224
+
+* added a network logger
+
 ### 003 20150223
 
 * fixed a problem with the imports in the logger sketches
