@@ -1,9 +1,10 @@
-import ciid2015.exquisitdatacorpse.*;
 import oscP5.*;
 import netP5.*;
-
+import ciid2015.exquisitdatacorpse.NetworkClient;
 NetworkClient mClient;
+
 float mBackgroundColor;
+
 void setup() {
     size(640, 480);
     frameRate(25);
@@ -13,13 +14,15 @@ void setup() {
      *
      * network party knowledge: if the server is run on the same machine as
      * the sketch you can also specify the server as `localhost` or with the
-     * ip address `127.0.0.1.`
+     * ip address `127.0.0.1`.
      */
     mClient = new NetworkClient(this, "edc.local", "client");
 }
+
 void draw() {
     background(mBackgroundColor);
 }
+
 void mousePressed() {
     /*
      * send a message with the tag `random` and a random value from 0 to
@@ -28,6 +31,7 @@ void mousePressed() {
      */
     mClient.send("random", random(255));
 }
+
 void keyPressed() {
     /* connect to or disconnect from server if the keys `.` or `,` are pressed */
     if (key == ',') {
@@ -37,6 +41,7 @@ void keyPressed() {
         mClient.connect();
     }
 }
+
 /*
  * if the following three `receive` methods are implemented they will be
  * called in case a message from the server is received with eiter one, two
@@ -44,6 +49,7 @@ void keyPressed() {
  */
 void receive(String name, String tag, float x) {
     println("### received: " + name + " - " + tag + " - " + x);
+
     /*
      * we are only interested in messages from `client` with the tag
      * `random` ( i.e. ourself )
@@ -52,9 +58,11 @@ void receive(String name, String tag, float x) {
         mBackgroundColor = x;
     }
 }
+
 void receive(String name, String tag, float x, float y) {
     println("### received: " + name + " - " + tag + " - " + x + ", " + y);
 }
+
 void receive(String name, String tag, float x, float y, float z) {
     println("### received: " + name + " - " + tag + " - " + x + ", " + y + ", " + z);
 }

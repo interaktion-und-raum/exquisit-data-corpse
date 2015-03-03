@@ -19,20 +19,21 @@ do
 	SKETCHNAME=$(echo $FILENAME | sed -e 's/.java//')
 	SKETCHNAME=$(echo $SKETCHNAME | sed -e 's/Sketch//')
 	SKETCHFILE_NAME="$SKETCHNAME.pde"
-	
-	
+		
 	echo "# sketch '"$SKETCHNAME"'"
 
 	mkdir -p $OUTPUT_DIR/$SKETCHNAME
 
 	cat $file | \
 	sed '
-			# only consider the lines in 'PApplet'
-			/extends PApplet/,/^}$/ !d
+			# remove package
+			s/package.*//
+			# remove processing imports
+			s/import processing.core.*//
+			# remove class defintion 
+			s/.*extends PApplet {//
 			# remove all tabs from line start
 			s/[ ^I]*$//
-			# remove empty lines
-			/^$/ d
 			# remove 'private' + 'protected' + 'public'
 			s/private //
 			s/protected //
@@ -41,11 +42,50 @@ do
 			/static void main/,/}$/ {
 				D
 			}
-			# remove first and last line
-			/^class/ d
+			# remove last line
 			/^}/ d
 			# remove trailing space
 			s/    //
+		'\
+		> /tmp/tmp.pde
+
+		cat /tmp/tmp.pde | \
+		sed '
+			1 i\
+			 import oscP5.*;\
+			 import netP5.*;
+			# remove empty lines
+			#/^$/ d
+			/^$/{N;/^\n$/d;}
+		'\
+		> $OUTPUT_DIR/$SKETCHNAME/$SKETCHFILE_NAME
+done
+
+exit 0
+
+#  ---- left overs ---- #
+# 
+# 	cat $file | \
+# 	sed '
+# 			# only consider the lines in 'PApplet'
+# 			/extends PApplet/,/^}$/ !d
+# 			# remove all tabs from line start
+# 			s/[ ^I]*$//
+# 			# remove empty lines
+# 			/^$/ d
+# 			# remove 'private' + 'protected' + 'public'
+# 			s/private //
+# 			s/protected //
+# 			s/public //
+# 			# remove main method
+# 			/static void main/,/}$/ {
+# 				D
+# 			}
+# 			# remove first and last line
+# 			/^class/ d
+# 			/^}/ d
+# 			# remove trailing space
+# 			s/    //
 		'\
 		> /tmp/tmp.pde
 
@@ -58,7 +98,3 @@ do
 			 \
 		'\
 		> $OUTPUT_DIR/$SKETCHNAME/$SKETCHFILE_NAME
-
-done
-
-exit 0

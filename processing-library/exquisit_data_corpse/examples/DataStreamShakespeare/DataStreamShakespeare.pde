@@ -1,34 +1,41 @@
-import ciid2015.exquisitdatacorpse.*;
 import oscP5.*;
 import netP5.*;
-
+import ciid2015.exquisitdatacorpse.NetworkClient;
 int mLineNum = 0;
 int mCharNum = 0;
 NetworkClient mClient;
+
 void setup() {
     size(15, 15);
     frameRate(5);
+
     textFont(createFont("Courier", 10));
     textAlign(CENTER, CENTER);
+
     mClient = new NetworkClient(this, "edc.local", "midsummer");
 }
+
 void draw() {
     mCharNum++;
     if (mCharNum >= mEntireText[mLineNum].length()) {
         mCharNum = 0;
         mLineNum++;
+
         /* if the end of the text is reached, start all over again */
         if (mLineNum >= mEntireText.length) {
             mLineNum = 0;
         }
     }
+
     char mChar = mEntireText[mLineNum].charAt(mCharNum);
     mClient.send("single-character", mChar);
+
     background(255);
     noStroke();
     fill(0);
     text(mChar, width / 2, height / 2);
 }
+
 void keyPressed() {
     if (key == ',') {
         mClient.disconnect();

@@ -138,12 +138,6 @@ public class NetworkClient {
         mOSC.send(m, mBroadcastLocation);
     }
 
-    public void send(String tag, String message) {
-        OscMessage m = new OscMessage(getAddressPattern(tag));
-        m.add(message);
-        mOSC.send(m, mBroadcastLocation);
-    }
-
     public void send(String tag, float x, float y) {
         OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
@@ -156,6 +150,12 @@ public class NetworkClient {
         m.add(x);
         m.add(y);
         m.add(z);
+        mOSC.send(m, mBroadcastLocation);
+    }
+
+    public void send(String tag, String message) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(message);
         mOSC.send(m, mBroadcastLocation);
     }
 
@@ -192,6 +192,10 @@ public class NetworkClient {
         plant(LOCALHOST, tag, x, y, z);
     }
 
+    public void sneak(String tag, String message) {
+        plant(LOCALHOST, tag, message);
+    }
+
     public void plant(String IP, String tag, float x) {
         OscMessage m = new OscMessage(getAddressPattern(tag));
         m.add(x);
@@ -212,6 +216,13 @@ public class NetworkClient {
         m.add(x);
         m.add(y);
         m.add(z);
+        NetAddress mLocal = new NetAddress(IP, mPort);
+        OscP5.flush(m, mLocal);
+    }
+
+    public void plant(String IP, String tag, String message) {
+        OscMessage m = new OscMessage(getAddressPattern(tag));
+        m.add(message);
         NetAddress mLocal = new NetAddress(IP, mPort);
         OscP5.flush(m, mLocal);
     }

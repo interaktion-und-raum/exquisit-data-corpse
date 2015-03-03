@@ -1,11 +1,14 @@
 package ciid2015.exquisitdatacorpse.additional.examples;
 
 import ciid2015.exquisitdatacorpse.NetworkClient;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
+import controlP5.Textfield;
 import processing.core.PApplet;
 
 public class AppOSChatter extends PApplet {
 
-    private controlP5.ControlP5 cp5;
+    private ControlP5 cp5;
 
     private NetworkClient mClient;
 
@@ -15,9 +18,9 @@ public class AppOSChatter extends PApplet {
         size(displayWidth / 2 - 10, 50);
 
         frameRate(15);
-        mClient = new NetworkClient(this, "edc.local", "OSChat");
+        mClient = new NetworkClient(this, "localhost", "OSChat");
 
-        cp5 = new controlP5.ControlP5(this);
+        cp5 = new ControlP5(this);
 
         cp5.addTextfield("msg")
                 .setPosition(10, 10)
@@ -42,11 +45,11 @@ public class AppOSChatter extends PApplet {
     }
 
     public void clear() {
-        cp5.get(controlP5.Textfield.class, "msg").clear();
+        cp5.get(Textfield.class, "msg").clear();
     }
 
-    public void controlEvent(controlP5.ControlEvent theEvent) {
-        if (theEvent.isAssignableFrom(controlP5.Textfield.class)) {
+    public void controlEvent(ControlEvent theEvent) {
+        if (theEvent.isAssignableFrom(Textfield.class)) {
             if (theEvent.getName().equals("msg")) {
                 sendMsg(theEvent.getStringValue());
             }

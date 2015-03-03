@@ -1,24 +1,26 @@
 package ciid2015.exquisitdatacorpse.additional.examples;
 
 import ciid2015.exquisitdatacorpse.NetworkClient;
+import controlP5.ControlP5;
+import controlP5.Textarea;
 import processing.core.PApplet;
 
 public class AppOSChatLurker extends PApplet {
 
-    private controlP5.ControlP5 cp5;
+    private ControlP5 cp5;
 
     private NetworkClient mClient;
 
     private boolean onTop = true;
 
-    private controlP5.Textarea myTextarea;
+    private Textarea myTextarea;
 
     public void setup() {
         size(displayWidth / 2 - 10, 150);
 
         frameRate(2);
-        mClient = new NetworkClient(this, "edc.local", "OSChatLurker");
-        cp5 = new controlP5.ControlP5(this);
+        mClient = new NetworkClient(this, "localhost", "OSChatLurker");
+        cp5 = new ControlP5(this);
 
         cp5.addToggle("onTop")
                 .setPosition(displayWidth / 2 - 40, 10)
@@ -45,7 +47,7 @@ public class AppOSChatLurker extends PApplet {
     }
 
     public void receive(String name, String tag, String message) {
-        String mText = timestamp() + " " + name + " / " + tag + " : " + message;
+        String mText = timestamp() + " " + name + " : " + message;
         myTextarea.append("\n" + mText).scroll(1);
     }
 

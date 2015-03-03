@@ -18,7 +18,7 @@ public class SketchBroadcastingClient extends PApplet {
          *
          * network party knowledge: if the server is run on the same machine as
          * the sketch you can also specify the server as `localhost` or with the
-         * ip address `127.0.0.1.`
+         * ip address `127.0.0.1`.
          */
         mClient = new NetworkClient(this, "edc.local", "client");
     }
@@ -34,7 +34,6 @@ public class SketchBroadcastingClient extends PApplet {
          * three (x, y, z) paramters
          */
         mClient.send("random", random(255));
-        mClient.send("message", "hello world!");
     }
 
     public void keyPressed() {
