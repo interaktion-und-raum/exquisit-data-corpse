@@ -1,6 +1,8 @@
-package ciid2015.exquisitdatacorpse.additional.compileatruntime;
+package ciid2015.exquisitdatacorpse.additional.examples;
 
 import ciid2015.exquisitdatacorpse.NetworkClient;
+import ciid2015.exquisitdatacorpse.compileatruntime.Pod;
+import ciid2015.exquisitdatacorpse.compileatruntime.PodCompiler;
 import java.util.concurrent.CopyOnWriteArrayList;
 import processing.core.PApplet;
 
@@ -41,7 +43,7 @@ public class SketchCompilePodsFromNetwork extends PApplet {
 
     private String getSourceCode() {
         String mPodSrc = "import processing.core.PApplet;\n"
-                         + "import ciid2015.exquisitdatacorpse.additional.compileatruntime.Pod;\n"
+                         + "import ciid2015.exquisitdatacorpse.compileatruntime.Pod;\n"
                          + "\n"
                          + "public class PodTest implements Pod {\n"
                          + "\n"

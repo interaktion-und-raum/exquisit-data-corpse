@@ -1,6 +1,10 @@
-package ciid2015.exquisitdatacorpse.additional.compileatruntime;
+package ciid2015.exquisitdatacorpse.compileatruntime;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -95,6 +99,38 @@ public class PodDirectoryMonitor extends Thread {
         PodDirectoryMonitor mMonitor = new PodDirectoryMonitor(pPodListener, pDir, pExtension);
         mMonitor.start();
         return mMonitor;
+    }
+
+    public String loadString(String pFile) {
+        return loadString(path(), pFile);
+    }
+
+    public static String loadString(String pPath, String pFile) {
+        final File mFile = new File(pPath + pFile);
+        final StringBuilder content = new StringBuilder();
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(mFile));
+            String s = null;
+
+            while ((s = reader.readLine()) != null) {
+                content.append(s).append(System.getProperty("line.separator"));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return content.toString();
     }
 
     public static void main(String[] args) {

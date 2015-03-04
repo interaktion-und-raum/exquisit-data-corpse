@@ -1,5 +1,7 @@
-package ciid2015.exquisitdatacorpse.additional.compileatruntime;
+package ciid2015.exquisitdatacorpse.additional.examples;
 
+import ciid2015.exquisitdatacorpse.compileatruntime.Pod;
+import ciid2015.exquisitdatacorpse.compileatruntime.PodCompiler;
 import processing.core.PApplet;
 
 public class SketchCompilePodsFromString extends PApplet {
@@ -7,7 +9,7 @@ public class SketchCompilePodsFromString extends PApplet {
     private Pod mPod;
 
     private final String mPodSrc = "import processing.core.PApplet;\n"
-                                   + "import ciid2015.exquisitdatacorpse.additional.compileatruntime.Pod;\n"
+                                   + "import ciid2015.exquisitdatacorpse.compileatruntime.Pod;\n"
                                    + "\n"
                                    + "public class PodTest implements Pod {\n"
                                    + "\n"

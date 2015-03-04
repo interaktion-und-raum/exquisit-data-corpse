@@ -1,4 +1,4 @@
-package ciid2015.exquisitdatacorpse.additional.compileatruntime;
+package ciid2015.exquisitdatacorpse.compileatruntime;
 
 import processing.core.PApplet;
 
