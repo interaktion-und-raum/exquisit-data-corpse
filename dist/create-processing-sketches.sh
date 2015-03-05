@@ -4,8 +4,8 @@
 # for further hints on `sed` read this: http://www.grymoire.com/Unix/Sed.html
 #
 
-SRC_PATH="../src/ciid2015/exquisitdatacorpse/additional/examples"
-OUTPUT_DIR="../processing-library/exquisit_data_corpse/examples"
+SRC_PATH="../src/ciid2015/exquisitedatacorpse/additional/examples"
+OUTPUT_DIR="../processing-library/exquisitedatacorpse/examples"
 
 if [ -d "$OUTPUT_DIR" ]; then
 	rm -rf "$OUTPUT_DIR"
@@ -92,7 +92,7 @@ exit 0
 		cat /tmp/tmp.pde | \
 		sed '
 			1 i\
-			 import ciid2015.exquisitdatacorpse.*;\
+			 import ciid2015.exquisitedatacorpse.*;\
 			 import oscP5.*;\
 			 import netP5.*;\
 			 \

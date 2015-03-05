@@ -1,7 +1,7 @@
 #!/bin/sh
 
-SRC=$1/../../../netbeans/exquisit-data-corpse/dist/exquisit_data_corpse.jar
-DST=$1/../processing-library/exquisit_data_corpse/library
+SRC=$1/../../../netbeans/exquisitedatacorpse/dist/exquisitedatacorpse.jar
+DST=$1/../processing-library/exquisitedatacorpse/library
 
 if [ -d "$DST" ]; then
 	rm -rf "$DST"

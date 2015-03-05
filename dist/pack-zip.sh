@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LIBRARY=exquisit_data_corpse
+LIBRARY=exquisitedatacorpse
 VERSION=$(printf %03d%s ${2%.*})
 
 echo "* packing "$LIBRARY-$VERSION.zip

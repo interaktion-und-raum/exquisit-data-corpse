@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SRC=$1/../src
-DST=$1/../processing-library/exquisit_data_corpse/
+DST=$1/../processing-library/exquisitedatacorpse/
 
 if [ -d "$DST/src" ]; then
 	rm -rf "$DST/src"

@@ -10,6 +10,19 @@ teaching material for the *introduction to programming* course at CIID 2015
 
 ## versions
 
+### 008 20150305
+
+* orthographic corrections ;)
+
+### 007 20150304
+
+* added a *compile on runtime* package
+* added examples for compile at runtime
+
+### 006 20150226
+
+* omitted
+
 ### 005 20150225
 
 * added a simple chat
