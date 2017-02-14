@@ -51,7 +51,7 @@ public class SketchCircleLogo extends PApplet {
     public void keyPressed() {
         if (keyCode == ESC) {
             endRecord();
-            System.out.println("### saved PDF to folder " + sketchPath);
+            System.out.println("### saved PDF to folder " + sketchPath());
             exit();
         }
     }

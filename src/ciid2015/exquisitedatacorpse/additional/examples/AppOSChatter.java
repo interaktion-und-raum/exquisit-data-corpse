@@ -66,7 +66,7 @@ public class AppOSChatter extends PApplet {
         frame.removeNotify();
         frame.setUndecorated(true);
         frame.setResizable(true);
-        super.init();
+//        super.init();
     }
 
     public static void main(String[] args) {

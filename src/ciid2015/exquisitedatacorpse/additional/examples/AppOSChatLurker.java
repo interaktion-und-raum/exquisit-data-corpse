@@ -15,8 +15,11 @@ public class AppOSChatLurker extends PApplet {
 
     private Textarea myTextarea;
 
-    public void setup() {
+    public void settings() {
         size(displayWidth / 2 - 10, 150);
+    }
+
+    public void setup() {
 
         frameRate(2);
         mClient = new NetworkClient(this, "localhost", "OSChatLurker");
@@ -60,7 +63,7 @@ public class AppOSChatLurker extends PApplet {
         frame.removeNotify();
         frame.setUndecorated(true);
         frame.setResizable(true);
-        super.init();
+//        super.init();
     }
 
     public static void main(String[] args) {

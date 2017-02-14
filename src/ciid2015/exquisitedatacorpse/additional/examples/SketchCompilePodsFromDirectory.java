@@ -36,7 +36,7 @@ public class SketchCompilePodsFromDirectory extends PApplet implements PodListen
 
     public void setup() {
         size(640, 480);
-        mMonitor = PodDirectoryMonitor.monitor(this, sketchPath + "/data", ".java");
+        mMonitor = PodDirectoryMonitor.monitor(this, sketchPath() + "/data", ".java");
     }
 
     public void draw() {
